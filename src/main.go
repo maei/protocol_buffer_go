@@ -45,7 +45,11 @@ func main() {
 	fmt.Println(resultJSON)
 
 	// JSON to Protobuff structure
-	var m2 simplepb.SimpleMessage
-	service.ProtoExampleService.JSONtoProtoBuff(resultJSON, &m2)
-	fmt.Println(&m2)
+	// var m2 simplepb.SimpleMessage
+	m2 := &simplepb.SimpleMessage{}
+	//service.ProtoExampleService.JSONtoProtoBuff(resultJSON, &m2)
+	service.ProtoExampleService.JSONtoProtoBuff(resultJSON, m2)
+	fmt.Println(m2)
+	// fmt.Println(&m2)
+
 }
