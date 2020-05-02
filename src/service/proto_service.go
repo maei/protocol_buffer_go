@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/maei/protocol_buffer_go/src/messages"
 	"io/ioutil"
@@ -16,6 +17,8 @@ type protoExampleInterface interface {
 	UnmarshalProtoBuff([]byte, proto.Message) error
 	WriteFile([]byte) error
 	ReadFile(string) ([]byte, error)
+	ProtoBuffToJSON(proto.Message) (string, error)
+	JSONtoProtoBuff(string, proto.Message) error
 }
 
 type protoExampleService struct{}
@@ -47,6 +50,26 @@ func (p *protoExampleService) UnmarshalProtoBuff(bs []byte, message proto.Messag
 		return err
 	}
 
+	fmt.Println(message)
+	return nil
+}
+
+func (p *protoExampleService) ProtoBuffToJSON(message proto.Message) (string, error) {
+	marshaller := jsonpb.Marshaler{}
+	out, err := marshaller.MarshalToString(message)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+	return out, nil
+}
+
+func (p *protoExampleService) JSONtoProtoBuff(jsonInput string, message proto.Message) error {
+	err := jsonpb.UnmarshalString(jsonInput, message)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 	fmt.Println(message)
 	return nil
 }
