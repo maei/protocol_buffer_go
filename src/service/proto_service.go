@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/maei/protocol_buffer_go/src/messages"
+	"github.com/maei/protocol_buffer_go/src/messages/enum"
+	"github.com/maei/protocol_buffer_go/src/messages/simple"
 	"io/ioutil"
 	"log"
 )
@@ -12,25 +13,35 @@ import (
 var ProtoExampleService protoExampleInterface = &protoExampleService{}
 
 type protoExampleInterface interface {
-	DoSimple() *simplepb.SimpleMessage
+	DoSimple() *simple.SimpleMessage
 	MarshalProtoBuff(proto.Message) ([]byte, error)
 	UnmarshalProtoBuff([]byte, proto.Message) error
 	WriteFile([]byte) error
 	ReadFile(string) ([]byte, error)
 	ProtoBuffToJSON(proto.Message) (string, error)
 	JSONtoProtoBuff(string, proto.Message) error
+	CreateEnum() *enum.EnumMessage
 }
 
 type protoExampleService struct{}
 
-func (p *protoExampleService) DoSimple() *simplepb.SimpleMessage {
-	sm := simplepb.SimpleMessage{
+func (p *protoExampleService) DoSimple() *simple.SimpleMessage {
+	sm := simple.SimpleMessage{
 		Id:         1,
 		IsSimple:   true,
 		Name:       "Matthias",
 		SampleList: []int32{1, 2, 3, 4, 5},
 	}
 	return &sm
+}
+
+func (p *protoExampleService) CreateEnum() *enum.EnumMessage {
+	em := enum.EnumMessage{
+		Id: 22,
+		// DayOfTheWeek: 2,
+		DayOfTheWeek: enum.DayOfTheWeek_MONDAY,
+	}
+	return &em
 }
 
 func (p *protoExampleService) MarshalProtoBuff(message proto.Message) ([]byte, error) {

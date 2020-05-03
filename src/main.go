@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	simplepb "github.com/maei/protocol_buffer_go/src/messages"
+	"github.com/maei/protocol_buffer_go/src/messages/simple"
+
 	"github.com/maei/protocol_buffer_go/src/service"
 	"log"
 )
@@ -30,7 +31,8 @@ func main() {
 	}
 
 	// unmarshal byte-slice into a protocol-struct
-	var m1 simplepb.SimpleMessage
+	var m1 simple.SimpleMessage
+	// m1 := &simplepb.SimpleMessage{}
 	err2 := service.ProtoExampleService.UnmarshalProtoBuff(data, &m1)
 	if err2 != nil {
 		log.Println(err2)
@@ -46,10 +48,14 @@ func main() {
 
 	// JSON to Protobuff structure
 	// var m2 simplepb.SimpleMessage
-	m2 := &simplepb.SimpleMessage{}
+	m2 := &simple.SimpleMessage{}
 	//service.ProtoExampleService.JSONtoProtoBuff(resultJSON, &m2)
 	service.ProtoExampleService.JSONtoProtoBuff(resultJSON, m2)
 	fmt.Println(m2)
 	// fmt.Println(&m2)
+
+	// Create simple Enum
+	em := service.ProtoExampleService.CreateEnum()
+	fmt.Println(em)
 
 }

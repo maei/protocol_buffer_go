@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+/*
+option go_package = "github.com/maei/protocol_buffer_go/src/messages/simple";
+*/
+
+package simple;
+
+import "github.com/maei/protocol_buffer_go/src/messages/enum/enumpb.proto";
+
+message SimpleMessage {
+    int32 id = 1;
+    bool is_simple = 2;
+    string name = 3;
+    repeated int32 sample_list = 4;
+}
