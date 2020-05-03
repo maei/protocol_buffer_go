@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/maei/protocol_buffer_go/src/messages/enum"
-	"github.com/maei/protocol_buffer_go/src/messages/simple"
+	"github.com/maei/protocol_buffer_go/src/messages/complexpb"
+	"github.com/maei/protocol_buffer_go/src/messages/simplepb"
 	"io/ioutil"
 	"log"
 )
@@ -13,35 +13,40 @@ import (
 var ProtoExampleService protoExampleInterface = &protoExampleService{}
 
 type protoExampleInterface interface {
-	DoSimple() *simple.SimpleMessage
+	DoSimple() *simplepb.SimpleMessage
 	MarshalProtoBuff(proto.Message) ([]byte, error)
 	UnmarshalProtoBuff([]byte, proto.Message) error
 	WriteFile([]byte) error
 	ReadFile(string) ([]byte, error)
 	ProtoBuffToJSON(proto.Message) (string, error)
 	JSONtoProtoBuff(string, proto.Message) error
-	CreateEnum() *enum.EnumMessage
+	DoComplex() *complexpb.ComplexMessage
 }
 
 type protoExampleService struct{}
 
-func (p *protoExampleService) DoSimple() *simple.SimpleMessage {
-	sm := simple.SimpleMessage{
-		Id:         1,
-		IsSimple:   true,
-		Name:       "Matthias",
-		SampleList: []int32{1, 2, 3, 4, 5},
+func (p *protoExampleService) DoSimple() *simplepb.SimpleMessage {
+	sm := simplepb.SimpleMessage{
+		Id:           1,
+		IsSimple:     true,
+		Name:         "Matthias",
+		SampleList:   []int32{1, 2, 3, 4, 5},
+		DayOfTheWeek: 4,
 	}
 	return &sm
 }
 
-func (p *protoExampleService) CreateEnum() *enum.EnumMessage {
-	em := enum.EnumMessage{
-		Id: 22,
-		// DayOfTheWeek: 2,
-		DayOfTheWeek: enum.DayOfTheWeek_MONDAY,
+func (p *protoExampleService) DoComplex() *complexpb.ComplexMessage {
+	dm := complexpb.DummyMessage{
+		Id:   2,
+		Name: "Amphitheater",
 	}
-	return &em
+
+	cm := complexpb.ComplexMessage{
+		OneDummy:      &dm,
+		MultipleDummy: []*complexpb.DummyMessage{{Id: 5, Name: "Matthias"}, {Id: 6, Name: "Sonia"}},
+	}
+	return &cm
 }
 
 func (p *protoExampleService) MarshalProtoBuff(message proto.Message) ([]byte, error) {
