@@ -6,6 +6,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/maei/protocol_buffer_go/src/messages/complexpb"
 	"github.com/maei/protocol_buffer_go/src/messages/simplepb"
+	"github.com/maei/shared_utils_go/rest_errors"
 	"io/ioutil"
 	"log"
 )
@@ -21,9 +22,19 @@ type protoExampleInterface interface {
 	ProtoBuffToJSON(proto.Message) (string, error)
 	JSONtoProtoBuff(string, proto.Message) error
 	DoComplex() *complexpb.ComplexMessage
+	WriteAddress([]byte) (*simplepb.SimpleMessage, rest_errors.RestErr)
 }
 
 type protoExampleService struct{}
+
+func (p *protoExampleService) WriteAddress(bs []byte) (*simplepb.SimpleMessage, rest_errors.RestErr) {
+	sm := &simplepb.SimpleMessage{}
+	err := jsonpb.UnmarshalString(string(bs), sm)
+	if err != nil {
+		return nil, rest_errors.NewInternalServerError("sth went wrong make json to proto", err)
+	}
+	return sm, nil
+}
 
 func (p *protoExampleService) DoSimple() *simplepb.SimpleMessage {
 	sm := simplepb.SimpleMessage{

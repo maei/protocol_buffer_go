@@ -2,18 +2,22 @@ package main
 
 import (
 	"fmt"
+	"github.com/maei/protocol_buffer_go/src/app"
 	"github.com/maei/protocol_buffer_go/src/messages/simplepb"
-
 	"github.com/maei/protocol_buffer_go/src/service"
+	"github.com/maei/shared_utils_go/logger"
 	"log"
 )
 
 func main() {
+	logger.Info("starting protobuff-service")
+	app.StartApplication()
+
 	// Create a struct out of the protocol-buffer file
 	erg := service.ProtoExampleService.DoSimple()
 	fmt.Println(erg)
 
-	// Make []byte out of the struct with inbuild marshal function
+	// Make []byte out of the struct with in build marshal function
 	bs, err := service.ProtoExampleService.MarshalProtoBuff(erg)
 	if err != nil {
 		log.Println(err)
@@ -54,4 +58,12 @@ func main() {
 	fmt.Println(m2)
 	// fmt.Println(&m2)
 
+	/*	p1 := address.Person{Name: "Matthias", Id: 1, Email: "eiletz@oecg.de", Phones: []*address.Person_PhoneNumber{{Number: "0162215225", Type: 2},},}
+		ab2 := service.AddressService.WriteAddress(p1)
+		fmt.Println(ab2)
+
+		service.AddressService.ReadAddress()
+		p2 := address.Person{Name: "Sonia", Id: 1, Email: "sonia@oecg.de", Phones: []*address.Person_PhoneNumber{{Number: "1337", Type: 1},},}
+		ab2 = service.AddressService.WriteAddress(p2)
+		fmt.Println(ab2)*/
 }
