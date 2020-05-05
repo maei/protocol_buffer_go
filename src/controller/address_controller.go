@@ -6,6 +6,7 @@ import (
 	"github.com/maei/shared_utils_go/rest_errors"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 var AddressController addressControllerInterface = &addressController{}
@@ -37,6 +38,12 @@ func (a *addressController) WriteAddress(c echo.Context) error {
 func (a *addressController) ReadAddress(c echo.Context) error {
 	ab, writeErr := service.AddressService.ReadAddress()
 	if writeErr != nil {
+		if strings.Contains(writeErr.Error(), "reading file") {
+			return c.JSON(http.StatusNotFound, map[string]string{
+				"message": "file not found",
+			})
+		}
+
 		return c.JSON(writeErr.Status(), writeErr)
 	}
 	return c.JSON(http.StatusOK, ab)
