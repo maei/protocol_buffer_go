@@ -11,6 +11,7 @@ var (
 
 func StartApplication() {
 	mapUrls()
-	router.Use(middleware.HeaderMiddleware.ServerHeader)
+	//router.Use(middleware.HeaderMiddleware.ServerHeader)
+	router.Use(middleware.HeaderMiddleware.CheckHeader)
 	router.Logger.Fatal(router.Start(":8002"))
 }
