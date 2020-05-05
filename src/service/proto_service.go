@@ -68,6 +68,7 @@ func (p *protoExampleService) MarshalProtoBuff(message proto.Message) ([]byte, e
 	}
 	return bs, nil
 }
+
 func (p *protoExampleService) UnmarshalProtoBuff(bs []byte, message proto.Message) error {
 	// das hier nehmen, wenn ich hier die struct initialisieren will und von der main abkapseln möchte
 	//m1 := &simplepb.SimpleMessage{}

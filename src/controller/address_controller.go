@@ -12,6 +12,7 @@ var AddressController addressControllerInterface = &addressController{}
 
 type addressControllerInterface interface {
 	WriteAddress(echo.Context) error
+	ReadAddress(c echo.Context) error
 }
 
 type addressController struct{}
@@ -27,6 +28,14 @@ func (a *addressController) WriteAddress(c echo.Context) error {
 	}
 
 	ab, writeErr := service.AddressService.WriteAddress(bs)
+	if writeErr != nil {
+		return c.JSON(writeErr.Status(), writeErr)
+	}
+	return c.JSON(http.StatusOK, ab)
+}
+
+func (a *addressController) ReadAddress(c echo.Context) error {
+	ab, writeErr := service.AddressService.ReadAddress()
 	if writeErr != nil {
 		return c.JSON(writeErr.Status(), writeErr)
 	}

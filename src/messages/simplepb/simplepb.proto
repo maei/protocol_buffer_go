@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package simple;
+
 option go_package = "messages/simplepb";
 
 message SimpleMessage {
